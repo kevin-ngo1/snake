@@ -64,6 +64,13 @@ def check_collision():
         new_segment = pygame.Rect(last_segment.x, last_segment.y, segment_size, segment_size)
         snake.append(new_segment)
 
+def check_self_collision():
+    head = snake[0]
+    for segment in snake[3:]:
+        if head.colliderect(segment):
+            return True
+    return False
+
 def generate_apple():
     apple_x = random.randint(gameboy_area.left // segment_size, (gameboy_area.right - segment_size) // segment_size) * segment_size
     apple_y = random.randint(gameboy_area.top // segment_size, (gameboy_area.bottom - segment_size) // segment_size) * segment_size
@@ -142,6 +149,9 @@ while run:
         snake_dir = (snake_dir[0], 0)
         game_over = True
 
+    if check_self_collision():
+        game_over = True
+        
     if game_over:
         loss_text = retro_font.render('Vous avez perdu !', True, white)
         loss2_text = retro_font2.render('Appuyez sur "R" pour rejouer', True, white)
